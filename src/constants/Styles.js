@@ -21,7 +21,9 @@ const Styles = StyleSheet.create({
         padding:16,
         paddingHorizontal:12,
         width:(windowWidth/2)-24,
-        alignItems:'center'
+        alignItems:'center',
+        borderWidth:1,
+        borderColor:colors.border
     },
     lotteryCard:{
         paddingHorizontal:16,

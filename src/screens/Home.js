@@ -14,29 +14,45 @@ import { GAMBannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-a
 const adUnitId = 'ca-app-pub-9079412151911301/9661313073';
 
 export default function Home() {
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+
+    if (hour < 12) {
+      return 'Hi, Good morning!';
+    }
+    if (hour < 17) {
+      return 'Hi, Good afternoon!';
+    }
+    return 'Hi, Good evening!';
+  };
+
+
   const navigation = useNavigation()
   // const homeData = require('../constants/HomeData')
   return (
     <View style={Styles.container}>
-      <Header title={'Home'} />
+      <Header title={getGreeting()} />
 
       <View style={{ marginTop: 8 }}>
         <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.ANCHORED_ADAPTIVE_BANNER]} />
       </View>
-      
+
       <View style={Styles.innerContainer}>
         <View style={[Styles.row, { justifyContent: 'space-between' }]}>
           {
             HomeData.map((data, index) => {
               return (
-                <Animatable.View style={Styles.homeCard} key={index} animation={'zoomIn'}>
-                  <Image source={data.logo} style={{ width: 70, height: 50, resizeMode: 'contain' }} />
-                  <Text style={{ textAlign: 'center', paddingVertical: 16, fontWeight: '700' }}>{data.title_si}</Text>
-                  <Button mode="contained" style={{ backgroundColor: data.color }} onPress={() => navigation.navigate('lotteries', { data: data })}>
-                    <Text>ප්‍රතිඵල  </Text>
-                    <AntDesign name="right" size={12} color={colors.white} />
-                  </Button>
-                </Animatable.View>
+                <View key={index}>
+                  <Animatable.View style={Styles.homeCard} animation={'zoomIn'}>
+                    <Image source={data.logo} style={{ width: 70, height: 50, resizeMode: 'contain' }} />
+                    <Text style={{ textAlign: 'center', paddingVertical: 16, fontWeight: '700' }}>{data.title_si}</Text>
+                    <Button mode="contained" style={{ backgroundColor: data.color }} onPress={() => navigation.navigate('lotteries', { data: data })}>
+                      <Text>ප්‍රතිඵල  </Text>
+                      <AntDesign name="right" size={12} color={colors.white} />
+                    </Button>
+                  </Animatable.View>
+                </View>
               )
             })
           }

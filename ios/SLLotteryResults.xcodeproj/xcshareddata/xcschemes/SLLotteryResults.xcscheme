@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "sllotteryresult.app"
-               BlueprintName = "sllotteryresult"
-               ReferencedContainer = "container:sllotteryresult.xcodeproj">
+               BuildableName = "SLLotteryResults.app"
+               BlueprintName = "SLLotteryResults"
+               ReferencedContainer = "container:SLLotteryResults.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "sllotteryresultTests.xctest"
-               BlueprintName = "sllotteryresultTests"
-               ReferencedContainer = "container:sllotteryresult.xcodeproj">
+               BuildableName = "SLLotteryResultsTests.xctest"
+               BlueprintName = "SLLotteryResultsTests"
+               ReferencedContainer = "container:SLLotteryResults.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "sllotteryresult.app"
-            BlueprintName = "sllotteryresult"
-            ReferencedContainer = "container:sllotteryresult.xcodeproj">
+            BuildableName = "SLLotteryResults.app"
+            BlueprintName = "SLLotteryResults"
+            ReferencedContainer = "container:SLLotteryResults.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "sllotteryresult.app"
-            BlueprintName = "sllotteryresult"
-            ReferencedContainer = "container:sllotteryresult.xcodeproj">
+            BuildableName = "SLLotteryResults.app"
+            BlueprintName = "SLLotteryResults"
+            ReferencedContainer = "container:SLLotteryResults.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

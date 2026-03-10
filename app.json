@@ -1,6 +1,6 @@
 {
-  "name": "sllotteryresult",
-  "displayName": "sllotteryresult",
+  "name": "SL Lottery Results",
+  "displayName": "SL Lottery Results",
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-9079412151911301~4764209614"
   }

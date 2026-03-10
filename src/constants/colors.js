@@ -1,6 +1,6 @@
 
 const colors = {
-  primary: '#0B5ED7',     // Official blue
+  primary: '#F9B247',     // Official blue
   secondary: '#198754',   // Lucky green
   background: '#F5F7FA',
   card: '#F8F9FA',

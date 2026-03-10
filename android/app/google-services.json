@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "644480929194",
+    "project_id": "sllotteryresults-bf2ed",
+    "storage_bucket": "sllotteryresults-bf2ed.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644480929194:android:378e17bf92fa9d60ae2fd3",
+        "android_client_info": {
+          "package_name": "com.sllotteryresult"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAisghdeKPRIumzbcYF1PZdNNCVUgvrwPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
