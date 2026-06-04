@@ -19,7 +19,7 @@ export default function Lotteries() {
 
     const goToLottery = (lottery) => {
         if (data.short == 'nlb') {
-            let url = 'https://www.nlb.lk/සිංහල/ප්%E2%80%8Dරතිඵල/' + lottery.name_si
+            let url = 'https://www.nlb.lk/results/' + lottery.name
             navigation.navigate('webviewer', { url: url, lottery: lottery,type:'nlb' })
             console.log(url)
         }
@@ -34,12 +34,12 @@ export default function Lotteries() {
 
     return (
         <View style={Styles.container}>
-            <Header title={data.title_si} leftIcon={'arrow-left'} leftIconOnPress={() => navigation.goBack()} />
+            <Header title={data.title_en} leftIcon={'arrow-left'} leftIconOnPress={() => navigation.goBack()} />
             <View style={Styles.innerContainer}>
 
                             <TouchableOpacity onPress={() => navigation.navigate('webviewer', { url: data.short=='nlb'?'https://www.nlb.lk/%E0%B7%83%E0%B7%92%E0%B6%82%E0%B7%84%E0%B6%BD':'https://www.dlb.lk/home/si',company:data.short})}>
                                 <Animatable.View style={[Styles.lotteryCard, { backgroundColor: data.color,height:50}]} animation={'fadeInLeft'} >
-                                    <Text style={{ color: colors.white }}>සියලුම නවතම ප්‍රතිඵල</Text>
+                                    <Text style={{ color: colors.white }}>Latest Results - සියලුම නවතම ප්‍රතිඵල </Text>
                                 </Animatable.View>
                             </TouchableOpacity>
                 {
@@ -48,14 +48,14 @@ export default function Lotteries() {
                             <TouchableOpacity key={index} onPress={() => goToLottery(lottery)}>
                                 <Animatable.View style={[Styles.lotteryCard, { backgroundColor: data.color }]} animation={'fadeInLeft'} delay={(index+1) * 100} >
                                     <Image source={lottery.logo} style={{ height: 30, width: 50, resizeMode: 'contain' }} />
-                                    <Text style={{ color: colors.white }}>  {lottery.title_si}</Text>
+                                    <Text style={{ color: colors.white }}>  {lottery.title_en} - {lottery.title_si}</Text>
                                 </Animatable.View>
                             </TouchableOpacity>
                         )
                     })
                 }
+            <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.MEDIUM_RECTANGLE]} />
             </View>
-            <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.FULL_BANNER]} />
         </View>
     )
 }

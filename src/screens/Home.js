@@ -46,9 +46,10 @@ export default function Home() {
                 <View key={index}>
                   <Animatable.View style={Styles.homeCard} animation={'zoomIn'}>
                     <Image source={data.logo} style={{ width: 70, height: 50, resizeMode: 'contain' }} />
-                    <Text style={{ textAlign: 'center', paddingVertical: 16, fontWeight: '700' }}>{data.title_si}</Text>
+                    <Text style={{ textAlign: 'center', paddingVertical: 16, fontWeight: '700' }}>{data.title_en}</Text>
+                    <Text style={{ textAlign: 'center', paddingBottom: 16, fontWeight: '700' }}>{data.title_si}</Text>
                     <Button mode="contained" style={{ backgroundColor: data.color }} onPress={() => navigation.navigate('lotteries', { data: data })}>
-                      <Text>ප්‍රතිඵල  </Text>
+                      <Text>Results  </Text>
                       <AntDesign name="right" size={12} color={colors.white} />
                     </Button>
                   </Animatable.View>

@@ -7,8 +7,10 @@ import Home from '../screens/Home'
 import Lotteries from '../screens/Lotteries'
 import WebViewer from '../screens/WebViewer'
 import QR from '../screens/QR'
+import Settings from '../screens/Settings'
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import colors from '../constants/colors'
 
 const Tab = createBottomTabNavigator();
@@ -27,6 +29,13 @@ function HomeTabs() {
         {
           tabBarIcon:({focused,color})=><MaterialIcons name="qr-code" size={30} color={color} />,
           title:'Scan QR'
+        }
+      } />
+      <Tab.Screen name="Settings" component={Settings}
+      options={
+        {
+          tabBarIcon:({focused,color})=><Feather name="settings" size={30} color={color} />,
+          title:'Settings'
         }
       } />
 

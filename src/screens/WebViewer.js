@@ -19,7 +19,7 @@ export default function WebViewer() {
   return (
     <View style={Styles.container}>
       <StatusBar backgroundColor={colors.white} barStyle={'dark-content'}/>
-      <Header title={lottery?lottery.title_si:(route.params?.company).toUpperCase()+'  නවතම ප්‍රතිඵල'} leftIcon={'arrow-left'} leftIconOnPress={()=>navigation.goBack()} />
+      <Header title={lottery?lottery.title_en:(route.params?.company).toUpperCase()+'  Latest Results'} leftIcon={'arrow-left'} leftIconOnPress={()=>navigation.goBack()} />
       {
         loading&&
         <View style={[StyleSheet.absoluteFill,{backgroundColor:'rgba(0,0,0,0.3)',alignItems:'center',justifyContent:'center',flex:1,zIndex:10}]}>
@@ -28,7 +28,7 @@ export default function WebViewer() {
       }
       <WebView 
       source={{ uri: route.params?.url }} 
-      style={{ flex: 1 ,marginTop: route.params?.type=='nlb'?-250:-480,paddingBottom:800}} 
+      style={{ flex: 1 ,marginTop: route.params?.type=='nlb'?-280:route.params?.type=='dlb'?-480:-50,paddingBottom:800}} 
       onLoadStart={()=>setLoading(true)}
       onLoadEnd={()=>setLoading(false)}
       />
