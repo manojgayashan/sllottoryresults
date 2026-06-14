@@ -300,9 +300,9 @@ export default function Settings() {
                 </Card>
 
                 {/* ── Ad Banner ── */}
-                <View style={{ alignItems: 'center', marginTop: 24 }}>
+                {/* <View style={{ alignItems: 'center', marginTop: 24 }}>
                     <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.MEDIUM_RECTANGLE]} />
-                </View>
+                </View> */}
             </ScrollView>
         </View>
     )

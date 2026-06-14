@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import DLBlotteryList from '../constants/DLBlotteryList'
 import { GAMBannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = 'ca-app-pub-9079412151911301/2406311027';
+const adUnitId = __DEV__ ? TestIds.GAM_BANNER : 'ca-app-pub-9079412151911301/2406311027';
 
 const Ball = ({ value, color }) => (
     <View style={[styles.ball, { backgroundColor: color }]}>

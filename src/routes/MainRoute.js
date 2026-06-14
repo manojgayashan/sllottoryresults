@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home'
 import Lotteries from '../screens/Lotteries'
 import WebViewer from '../screens/WebViewer'
+import LotteryResult from '../screens/LotteryResult'
 import QR from '../screens/QR'
 import Settings from '../screens/Settings'
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -53,6 +54,10 @@ function RootStack() {
       <Stack.Screen
         name="lotteries"
         component={Lotteries}
+      />
+      <Stack.Screen
+        name="lotteryresult"
+        component={LotteryResult}
       />
       <Stack.Screen
         name="webviewer"

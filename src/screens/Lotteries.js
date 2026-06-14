@@ -9,7 +9,7 @@ import NLBlotteryList from '../constants/NLBlotteryList'
 import DLBlotteryList from '../constants/DLBlotteryList'
 import { GAMBannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = 'ca-app-pub-9079412151911301/2406311027';
+const adUnitId = __DEV__ ? TestIds.GAM_BANNER : 'ca-app-pub-9079412151911301/2406311027';
 
 export default function Lotteries() {
     const navigation = useNavigation()
@@ -18,18 +18,7 @@ export default function Lotteries() {
     const lotteries = data.short == 'nlb' ? NLBlotteryList : DLBlotteryList
 
     const goToLottery = (lottery) => {
-        if (data.short == 'nlb') {
-            let url = 'https://www.nlb.lk/results/' + lottery.name
-            navigation.navigate('webviewer', { url: url, lottery: lottery,type:'nlb' })
-            console.log(url)
-        }
-        else {
-            let url = 'https://www.dlb.lk/result/' + lottery.number
-            navigation.navigate('webviewer', { url: url, lottery: lottery,type:'dlb' })
-            console.log(url)
-        }
-
-
+        navigation.navigate('lotteryresult', { lottery, data, type: data.short })
     }
 
     return (

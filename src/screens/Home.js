@@ -11,7 +11,7 @@ import HomeData from '../constants/HomeData'
 import * as Animatable from 'react-native-animatable';
 import { GAMBannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = 'ca-app-pub-9079412151911301/9661313073';
+const adUnitId = __DEV__ ? TestIds.GAM_BANNER : 'ca-app-pub-9079412151911301/9661313073';
 
 export default function Home() {
 
