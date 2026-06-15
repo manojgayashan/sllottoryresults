@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { WebView } from 'react-native-webview'
 import Header from '../components/Header'
 import Styles from '../constants/Styles'
@@ -52,9 +53,9 @@ export default function LotteryResult() {
   const type = route.params?.type
 
   const today = useMemo(() => new Date(), [])
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(() => route.params?.selectedDate ? new Date(route.params.selectedDate) : null)
   const [calendarMonth, setCalendarMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1))
-  const [drawNumber, setDrawNumber] = useState('')
+  const [drawNumber, setDrawNumber] = useState(() => route.params?.drawNumber || '')
   const [resultUrl, setResultUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
@@ -160,7 +161,20 @@ export default function LotteryResult() {
     }
   }, [lottery, type])
 
-  const onSearch = () => {
+  const saveSearchEntry = async (entry) => {
+    try {
+      const key = 'search_history'
+      const raw = await AsyncStorage.getItem(key)
+      const list = raw ? JSON.parse(raw) : []
+      list.unshift(entry)
+      const trimmed = list.slice(0, 50)
+      await AsyncStorage.setItem(key, JSON.stringify(trimmed))
+    } catch (e) {
+      console.log('saveHistory error', e)
+    }
+  }
+
+  const onSearch = async () => {
     setLoading(true)
     setWebKey(webKey + 1) // Force WebView to remount and reset any previous state
     // if (!selectedDate && !drawNumber) return
@@ -211,8 +225,39 @@ export default function LotteryResult() {
       setShouldTriggerModal(true)
     }
     console.log('Navigating to URL:', url)
+    // save to history (best-effort) unless we arrived from history
+    try {
+      const fromHistory = route.params?.fromHistory
+      if (!fromHistory) {
+        const entry = {
+          id: Date.now(),
+          lottery: lottery || {},
+          lotteryTitle: lotteryTitle,
+          type: type,
+          date: selectedDate ? formatDate(selectedDate) : '',
+          drawNumber: drawNumber || '',
+          url: url,
+          timestamp: new Date().toISOString(),
+        }
+        saveSearchEntry(entry)
+      }
+    } catch (e) {
+      console.log('history save error', e)
+    }
     setResultUrl(url)
   }
+
+  // If navigated from history with parameters, run search automatically
+  useEffect(() => {
+    const fromHistory = route.params?.fromHistory
+    const hasParams = route.params?.selectedDate || route.params?.drawNumber
+    if (fromHistory && hasParams) {
+      // small delay to ensure states (selectedDate/drawNumber) are set
+      setTimeout(() => {
+        onSearch()
+      }, 50)
+    }
+  }, [route.params])
 
   return (
     <View style={Styles.container}>
@@ -251,14 +296,9 @@ export default function LotteryResult() {
               />
             </View>
 
-            <Button
-              mode="contained"
-              onPress={onSearch}
-              // disabled={!selectedDate && !drawNumber}
-              style={[localStyles.searchButtonCompact,{backgroundColor: type === 'nlb' ? '#12D1E0' : '#D42E2B'}]}
-            >
-              Go
-            </Button>
+              <TouchableOpacity onPress={onSearch} style={[localStyles.searchButtonCompact,{backgroundColor: type === 'nlb' ? '#12D1E0' : '#D42E2B'}]}>
+                <MaterialIcons name={'search'} size={20} color={colors.white} />
+              </TouchableOpacity>
           </View>
         </View>
       </Animatable.View>
@@ -518,7 +558,9 @@ const localStyles = StyleSheet.create({
   searchButtonCompact: {
     height: 40,
     justifyContent: 'center',
-    width: 70,
+    width: 40,
+    alignItems: 'center',
+    borderRadius: 8,
   },
   calendarOverlay: {
     position: 'absolute',

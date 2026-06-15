@@ -7,6 +7,7 @@ import Home from '../screens/Home'
 import Lotteries from '../screens/Lotteries'
 import WebViewer from '../screens/WebViewer'
 import LotteryResult from '../screens/LotteryResult'
+import SearchHistory from '../screens/SearchHistory'
 import QR from '../screens/QR'
 import Settings from '../screens/Settings'
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -62,6 +63,10 @@ function RootStack() {
       <Stack.Screen
         name="webviewer"
         component={WebViewer}
+      />
+      <Stack.Screen
+        name="SearchHistory"
+        component={SearchHistory}
       />
       {/* <Stack.Screen name="qr" component={QR} /> */}
     </Stack.Navigator>
