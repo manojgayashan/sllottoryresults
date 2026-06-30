@@ -14,9 +14,11 @@ export default function WebViewer() {
     const navigation = useNavigation()
     const route = useRoute()
     const lottery = route.params?.lottery
+    const company = route.params?.company ?? ''
+    const url = route.params?.url ?? ''
     const [loading, setLoading] = useState(false)
     const webviewRef = useRef(null)
-    const isDlb = route.params?.company === 'dlb'
+    const isDlb = company === 'dlb'
     const dlbScrollScript = `
       (function() {
         window.scrollTo(0, document.body.scrollHeight*2 || document.documentElement.scrollHeight*2);
@@ -30,25 +32,31 @@ export default function WebViewer() {
   return (
     <View style={Styles.container}>
       <StatusBar backgroundColor={colors.white} barStyle={'dark-content'}/>
-      <Header title={lottery?lottery.title_en:(route.params?.company).toUpperCase()+'  Latest Results'} leftIcon={'arrow-left'} leftIconOnPress={()=>navigation.goBack()} />
+      <Header title={lottery ? lottery.title_en : company ? company.toUpperCase() + ' Latest Results' : 'Latest Results'} leftIcon={'arrow-left'} leftIconOnPress={()=>navigation.goBack()} />
       {
         loading&&
         <View style={[StyleSheet.absoluteFill,{backgroundColor:'rgba(0,0,0,0.3)',alignItems:'center',justifyContent:'center',flex:1,zIndex:10}]}>
           <Animatable.Image source={require('../assets/app/logo.png')} style={{width:100,height:100}} animation={'flash'} duration={5000} iterationCount="infinite"/>
         </View>
       }
-      <WebView 
-      ref={webviewRef}
-      source={{ uri: route.params?.url }} 
-      style={{ flex: 1 ,marginTop: route.params?.company=='nlb'?-900:route.params?.company=='dlb'?-780:-50}} 
-      onLoadStart={()=>setLoading(true)}
-      onLoadEnd={() => {
-        setLoading(false)
-        if (isDlb && webviewRef.current) {
-          webviewRef.current.injectJavaScript(dlbScrollScript)
-        }
-      }}
-      />
+      {url ? (
+        <WebView
+          ref={webviewRef}
+          source={{ uri: url }}
+          style={{ flex: 1, marginTop: company === 'nlb' ? -900 : company === 'dlb' ? -780 : -50 }}
+          onLoadStart={() => setLoading(true)}
+          onLoadEnd={() => {
+            setLoading(false)
+            if (isDlb && webviewRef.current) {
+              webviewRef.current.injectJavaScript(dlbScrollScript)
+            }
+          }}
+        />
+      ) : (
+        <View style={[StyleSheet.absoluteFill, { justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }]}> 
+          <Text>No URL provided to display.</Text>
+        </View>
+      )}
             <View style={{ marginTop: 8 }}>
               <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.ANCHORED_ADAPTIVE_BANNER]} />
             </View>
