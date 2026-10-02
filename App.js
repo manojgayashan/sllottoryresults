@@ -37,7 +37,7 @@ export default function App() {
   const checkForUpdates = () => {
     inAppUpdates
       .checkNeedsUpdate({ curVersion: pkg.version })
-      .then(result => {
+      .then(async result => {
         console.log('Update check result:', result)
 
         if (!result.shouldUpdate) return
@@ -46,7 +46,7 @@ export default function App() {
           // ── IMMEDIATE: Play Store takes over full screen (best for critical updates)
           // The update dialog is shown by the OS — no custom modal needed.
           // Switch to FLEXIBLE below if you prefer background download + custom prompt.
-          inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE })
+          await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE })
 
           // ── FLEXIBLE (background download) — uncomment to use instead:
           // inAppUpdates.addStatusUpdateListener(onStatusUpdate)
@@ -55,7 +55,7 @@ export default function App() {
 
         if (Platform.OS === 'ios') {
           // iOS: shows a native alert directing user to the App Store
-          inAppUpdates.startUpdate({
+          await inAppUpdates.startUpdate({
             title: 'Update Available',
             message: 'A new version of the app is available. Please update to continue.',
             buttonUpgradeText: 'Update Now',
@@ -79,9 +79,13 @@ export default function App() {
     }
   }
 
-  const handleInstallNow = () => {
-    inAppUpdates.installUpdate()
-    setShowInstallModal(false)
+  const handleInstallNow = async () => {
+    try {
+      await inAppUpdates.installUpdate()
+      setShowInstallModal(false)
+    } catch (err) {
+      console.log('Update installation skipped:', err?.message)
+    }
   }
 
   return (

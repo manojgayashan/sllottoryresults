@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button } from 'react-native-paper'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Header from '../components/Header'
 
 export default function SearchHistory() {
@@ -84,8 +85,13 @@ export default function SearchHistory() {
           </View>
         </TouchableOpacity>
         <View style={styles.right}>
-          <TouchableOpacity onPress={() => onDelete(item)} style={styles.deleteButton}>
-            <Text style={styles.deleteText}>✕</Text>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Delete search"
+            onPress={() => onDelete(item)}
+            style={styles.deleteButton}
+          >
+            <MaterialIcons name="delete-outline" size={22} color="#d00" />
           </TouchableOpacity>
           <Text style={styles.time}>{when}</Text>
         </View>
@@ -96,16 +102,22 @@ export default function SearchHistory() {
   return (
     <View style={styles.container}>
 
-              <Header
+      <Header
         title={'Search History'}
         leftIcon={'arrow-left'}
         leftIconOnPress={() => navigation.goBack()}
-        rightIcon={'delete'}
       />
-      {/* <View style={styles.headerRow}>
-        <Text style={styles.header}></Text>
-        <Button mode="text" onPress={clearHistory}>Clear</Button>
-      </View> */}
+      <View style={styles.actionsRow}>
+        <Button
+          mode="text"
+          icon="delete"
+          compact
+          disabled={history.length === 0}
+          onPress={clearHistory}
+        >
+          Clear all
+        </Button>
+      </View>
 
       {history.length === 0 ? (
         <View style={styles.empty}>
@@ -125,8 +137,7 @@ export default function SearchHistory() {
 
 const styles = StyleSheet.create({
   container: { flex: 1},
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  header: { fontSize: 18, fontWeight: '700' },
+  actionsRow: { flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 12, paddingTop: 4 },
   empty: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   emptyText: { color: '#666' },
   row: { flexDirection: 'row', paddingVertical: 12, borderWidth: 1, borderColor: '#dedcdc',marginTop:10, borderRadius: 8, paddingHorizontal: 12,backgroundColor:'#fff' },
@@ -136,6 +147,5 @@ const styles = StyleSheet.create({
   title: { fontSize: 16, fontWeight: '600' },
   sub: { color: '#666', marginTop: 4 },
   time: { color: '#999', fontSize: 12, textAlign: 'right' },
-  deleteButton: { marginBottom: 6, alignItems: 'center',fontSize:12 },
-  deleteText: { color: '#d00', fontSize: 12, fontWeight: '700' },
+  deleteButton: { marginBottom: 6, alignItems: 'center', justifyContent: 'center', minWidth: 36, minHeight: 32 },
 })

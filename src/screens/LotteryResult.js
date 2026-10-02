@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react'
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { WebView } from 'react-native-webview'
@@ -9,8 +9,10 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { Button } from 'react-native-paper'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import * as Animatable from 'react-native-animatable'
+import { GAMBannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 
 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const adUnitId = __DEV__ ? TestIds.GAM_BANNER : 'ca-app-pub-9079412151911301/8054583904'
 
 const buildCalendarDays = (monthDate, today) => {
   const year = monthDate.getFullYear()
@@ -161,7 +163,7 @@ export default function LotteryResult() {
     }
   }, [lottery, type])
 
-  const saveSearchEntry = async (entry) => {
+  const saveSearchEntry = useCallback(async (entry) => {
     try {
       const key = 'search_history'
       const raw = await AsyncStorage.getItem(key)
@@ -172,11 +174,11 @@ export default function LotteryResult() {
     } catch (e) {
       console.log('saveHistory error', e)
     }
-  }
+  }, [])
 
-  const onSearch = async () => {
+  const onSearch = useCallback(async () => {
     setLoading(true)
-    setWebKey(webKey + 1) // Force WebView to remount and reset any previous state
+    setWebKey((currentKey) => currentKey + 1)
     // if (!selectedDate && !drawNumber) return
     let url = ''
 
@@ -245,19 +247,20 @@ export default function LotteryResult() {
       console.log('history save error', e)
     }
     setResultUrl(url)
-  }
+  }, [drawNumber, lottery, lotteryTitle, route.params?.fromHistory, saveSearchEntry, selectedDate, type])
 
   // If navigated from history with parameters, run search automatically
   useEffect(() => {
     const fromHistory = route.params?.fromHistory
+    const autoSearch = route.params?.autoSearch
     const hasParams = route.params?.selectedDate || route.params?.drawNumber
-    if (fromHistory && hasParams) {
-      // small delay to ensure states (selectedDate/drawNumber) are set
-      setTimeout(() => {
+    if ((fromHistory && hasParams) || autoSearch) {
+      const searchTimeout = setTimeout(() => {
         onSearch()
       }, 50)
+      return () => clearTimeout(searchTimeout)
     }
-  }, [route.params])
+  }, [onSearch, route.params])
 
   return (
     <View style={Styles.container}>
@@ -277,13 +280,24 @@ export default function LotteryResult() {
         <View style={localStyles.card}>
 
           <View style={localStyles.searchPanel}>
-            <TouchableOpacity style={localStyles.dropdownInput} onPress={() => setCalendarOpen(!calendarOpen)}>
-              {/* <Text style={localStyles.smallLabel}>Draw Date</Text> */}
-              <View style={localStyles.dropdownInner}>
-                <Text style={localStyles.inputText}>{selectedDate ? formatDate(selectedDate) : 'Draw date'}</Text>
-                <MaterialIcons name={calendarOpen ? 'arrow-drop-up' : 'arrow-drop-down'} size={22} color={colors.text} />
-              </View>
-            </TouchableOpacity>
+            <View style={localStyles.dateInputGroup}>
+              <TouchableOpacity style={localStyles.dropdownInput} onPress={() => setCalendarOpen(!calendarOpen)}>
+                <View style={localStyles.dropdownInner}>
+                  <Text style={localStyles.inputText}>{selectedDate ? formatDate(selectedDate) : 'Draw date'}</Text>
+                  <MaterialIcons name={calendarOpen ? 'arrow-drop-up' : 'arrow-drop-down'} size={22} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+              {selectedDate && (
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityLabel="Clear selected draw date"
+                  style={localStyles.clearDateButton}
+                  onPress={() => setSelectedDate(null)}
+                >
+                  <MaterialIcons name="close" size={18} color={colors.text} />
+                </TouchableOpacity>
+              )}
+            </View>
 
             <View style={localStyles.textInputWrapper}>
               {/* <Text style={localStyles.smallLabel}>Draw #</Text> */}
@@ -409,6 +423,13 @@ export default function LotteryResult() {
           </View>
         </View>
       )}
+
+      <View style={localStyles.bannerContainer}>
+        <GAMBannerAd
+          unitId={adUnitId}
+          sizes={[BannerAdSize.ANCHORED_ADAPTIVE_BANNER]}
+        />
+      </View>
     </View>
   )
 }
@@ -512,19 +533,40 @@ const localStyles = StyleSheet.create({
     color: colors.text,
     fontSize: 16,
   },
+  bannerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
   searchPanel: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  dropdownInput: {
+  dateInputGroup: {
     flex: 1.4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  dropdownInput: {
+    flex: 1,
     backgroundColor: colors.background,
     borderRadius: 10,
     height: 40,
     justifyContent: 'center',
     paddingHorizontal: 12,
-    marginRight: 8,
+    marginRight: 4,
+  },
+  clearDateButton: {
+    width: 36,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background,
+    borderRadius: 10,
   },
   textInputWrapper: {
     flex: 1,

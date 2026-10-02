@@ -8,12 +8,15 @@ const Header = ({
     leftIconOnPress,
     title,
     rightIcon,
-    rightIconOnPress
+    rightIconOnPress,
+    backgroundColor,
+    bottomContent
 }) => (
-  <Appbar.Header style={{backgroundColor:colors.white,borderBottomWidth:1,borderColor:colors.border}}>
+  <Appbar.Header style={{backgroundColor:backgroundColor?backgroundColor:colors.white,borderBottomWidth:1,borderColor:colors.border}}>
     {leftIcon &&<Appbar.Action icon={leftIcon} onPress={leftIconOnPress} />}
     <Appbar.Content title={title} />
     {rightIcon &&<Appbar.Action icon={rightIcon} onPress={rightIconOnPress} />}
+    {bottomContent && bottomContent}
   </Appbar.Header>
 );
 

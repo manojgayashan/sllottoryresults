@@ -1,6 +1,7 @@
 import {
     View, Text, TouchableOpacity, Switch, ScrollView,
-    Linking, Alert, StyleSheet, Platform, PermissionsAndroid
+    Linking, Alert, StyleSheet, Platform, PermissionsAndroid,
+    StatusBar
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Styles from '../constants/Styles'
@@ -217,6 +218,7 @@ export default function Settings() {
 
     return (
         <View style={Styles.container}>
+            <StatusBar backgroundColor={colors.white} />
             <Header title="Settings" />
 
             <ScrollView

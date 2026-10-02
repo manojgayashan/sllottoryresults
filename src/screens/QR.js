@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import DLBlotteryList from '../constants/DLBlotteryList'
 import { GAMBannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = __DEV__ ? TestIds.GAM_BANNER : 'ca-app-pub-9079412151911301/2406311027';
+const adUnitId = __DEV__ ? TestIds.GAM_BANNER : 'ca-app-pub-9079412151911301/2662656422'
 
 const Ball = ({ value, color }) => (
     <View style={[styles.ball, { backgroundColor: color }]}>
@@ -106,10 +106,15 @@ export default function QR() {
     }
 
     const extractUrl = (raw) => {
-        if (!raw) return null
+        if (typeof raw !== 'string' || !raw) return null
         const httpsMatch = raw.match(/(https?:\/\/[^\s]+)/)
         if (httpsMatch) return httpsMatch[1]
-        const decoded = decodeURIComponent(raw)
+        let decoded
+        try {
+            decoded = decodeURIComponent(raw)
+        } catch (e) {
+            return null
+        }
         const matched = DLBlotteryList.find(l => decoded.toLowerCase().includes(l.title_en.toLowerCase()))
         if (matched) return `https://www.dlb.lk/result/${matched.number}`
         const wwwMatch = decoded.match(/(www\.[^\s/]+)/)
@@ -257,6 +262,9 @@ export default function QR() {
                         {!hasPermission ? 'Requesting camera permission...' : 'No camera device found.'}
                     </Text>
                 </View>
+                <View style={styles.bannerContainer}>
+                    <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.FULL_BANNER]} />
+                </View>
             </View>
         )
     }
@@ -388,7 +396,9 @@ export default function QR() {
                 </View>
             )}
 
-            <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.FULL_BANNER]} />
+            <View style={styles.bannerContainer}>
+                <GAMBannerAd unitId={adUnitId} sizes={[BannerAdSize.FULL_BANNER]} />
+            </View>
         </View>
     )
 }
@@ -410,7 +420,8 @@ const styles = StyleSheet.create({
     bottomRight: { bottom: 0, right: 0, borderBottomWidth: CORNER_THICKNESS, borderRightWidth: CORNER_THICKNESS, borderColor: CORNER_COLOR },
     hintContainer: { position: 'absolute', bottom: 20, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.5)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
     hintText: { color: '#fff', fontSize: 14 },
-    overlayContainer: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.3)', padding: 24, zIndex: 999, paddingTop: 70 },
+    overlayContainer: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 60, backgroundColor: 'rgba(0,0,0,0.3)', padding: 24, zIndex: 999, paddingTop: 70 },
+    bannerContainer: { height: 60, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
     webHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 10, backgroundColor: '#f8f8f8', borderBottomWidth: 1, borderBottomColor: '#e0e0e0', borderTopLeftRadius: 20, borderTopRightRadius: 20 },
     webUrl: { flex: 1, fontSize: 15, color: '#000', paddingHorizontal: 10, paddingVertical: 5, fontWeight: '700' },
     webview: { flex: 1, marginTop: -180 },
